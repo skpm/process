@@ -1,0 +1,24 @@
+{
+  "name": "@skpm/process",
+  "version": "0.1.0",
+  "description": "Drop-in replacement for the process NodeJS global",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skpm/process.git"
+  },
+  "keywords": [
+    "sketch",
+    "module",
+    "process"
+  ],
+  "author": "Mathieu Dutour <mathieu@dutour.me> (http://mathieu.dutour.me/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/skpm/process/issues"
+  },
+  "homepage": "https://github.com/skpm/process#readme"
+}
