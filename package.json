@@ -1,10 +1,10 @@
 {
   "name": "@skpm/process",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Drop-in replacement for the process NodeJS global",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "skpm-test"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/skpm/process/issues"
   },
-  "homepage": "https://github.com/skpm/process#readme"
+  "homepage": "https://github.com/skpm/process#readme",
+  "devDependencies": {
+    "@skpm/test-runner": "^0.3.13"
+  }
 }

@@ -44,7 +44,7 @@ module.exports = {
   },
   get pid() {
     return __command.identifier
-  }
+  },
   execPath: String(NSBundle.mainBundle().executablePath()),
   type: "sketch",
   nextTick: typeof setImmediate !== 'undefined' ? setImmediate : undefined
