@@ -30,6 +30,10 @@ module.exports = {
   },
   arch: "x64",
   platform: "darwin",
+  cwd() {
+    var pluginBundle = __command.pluginBundle()
+    return pluginBundle ? String(pluginBundle.url().path()) : '/tmp'
+  },
   get env() {
     var env = toObject(NSProcessInfo.processInfo().environment())
     var pluginBundle = __command.pluginBundle()
