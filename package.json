@@ -1,6 +1,6 @@
 {
   "name": "@skpm/process",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Drop-in replacement for the process NodeJS global",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/skpm/process#readme",
   "devDependencies": {
-    "@skpm/test-runner": "^0.3.13"
+    "@skpm/test-runner": "^0.4.0"
   }
 }

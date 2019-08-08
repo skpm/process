@@ -1,3 +1,4 @@
+var EventEmitter = require("events");
 var toObject = require("util").toObject;
 
 var currentLocale = (function currentLocale() {
@@ -15,45 +16,81 @@ var currentLocale = (function currentLocale() {
   return languageCode + "-" + countryCode;
 })();
 
-module.exports = {
-  get title() {
-    return String(__command.name());
-  },
-  get version() {
-    var pluginBundle = __command.pluginBundle();
-    return pluginBundle ? String(pluginBundle.version()) : "0.0.0";
-  },
-  get versions() {
-    var pluginBundle = __command.pluginBundle();
-    return {
-      plugin: pluginBundle ? String(pluginBundle.version()) : "0.0.0",
-      sketch: MSApplicationMetadata.metadata().appVersion
-    };
-  },
-  arch: "x64",
-  platform: "darwin",
-  cwd() {
-    var pluginBundle = __command.pluginBundle();
-    return pluginBundle ? String(pluginBundle.url().path()) : "/tmp";
-  },
-  get env() {
-    var env = toObject(NSProcessInfo.processInfo().environment());
-    var pluginBundle = __command.pluginBundle();
-    env.command = __command;
-    if (pluginBundle) {
-      env.plugin = pluginBundle;
+var processShim = new EventEmitter();
+
+Object.defineProperties(processShim, {
+  title: {
+    enumerable: true,
+    get() {
+      return String(__command.name());
     }
-    if (currentLocale) {
-      env.LANG = currentLocale;
+  },
+  version: {
+    enumerable: true,
+    get() {
+      var pluginBundle = __command.pluginBundle();
+      return pluginBundle ? String(pluginBundle.version()) : "0.0.0";
     }
-    return env;
   },
-  get pid() {
-    return __command.identifier;
+  versions: {
+    enumerable: true,
+    get() {
+      return {
+        plugin: this.version,
+        sketch: MSApplicationMetadata.metadata().appVersion
+      };
+    }
   },
-  execPath: String(NSBundle.mainBundle().executablePath()),
-  type: "sketch",
-  get nextTick() {
-    return setImmediate;
+  arch: {
+    enumerable: true,
+    value: "x64"
+  },
+  platform: {
+    enumerable: true,
+    value: "darwin"
+  },
+  cwd: {
+    enumerable: true,
+    value: function() {
+      var pluginBundle = __command.pluginBundle();
+      return pluginBundle ? String(pluginBundle.url().path()) : "/tmp";
+    }
+  },
+  env: {
+    enumerable: true,
+    get() {
+      var env = toObject(NSProcessInfo.processInfo().environment());
+      var pluginBundle = __command.pluginBundle();
+      env.command = __command;
+      if (pluginBundle) {
+        env.plugin = pluginBundle;
+      }
+      if (currentLocale) {
+        env.LANG = currentLocale;
+      }
+      return env;
+    }
+  },
+  pid: {
+    enumerable: true,
+    get() {
+      return __command.identifier;
+    }
+  },
+  execPath: {
+    enumerable: true,
+    value: String(NSBundle.mainBundle().executablePath())
+  },
+  type: {
+    enumerable: true,
+    value: "sketch"
+  },
+  nextTick: {
+    enumerable: true,
+    get() {
+      return setImmediate;
+    }
   }
-};
+});
+
+module.exports = processShim;
