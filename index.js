@@ -37,7 +37,7 @@ Object.defineProperties(processShim, {
     get() {
       return {
         plugin: this.version,
-        sketch: MSApplicationMetadata.metadata().appVersion
+        sketch: String(MSApplicationMetadata.metadata().appVersion)
       };
     }
   },
@@ -74,7 +74,7 @@ Object.defineProperties(processShim, {
   pid: {
     enumerable: true,
     get() {
-      return __command.identifier;
+      return String(__command.identifier);
     }
   },
   execPath: {
@@ -89,6 +89,16 @@ Object.defineProperties(processShim, {
     enumerable: true,
     get() {
       return setImmediate;
+    }
+  },
+  argv: {
+    enumerable: true,
+    get() {
+      return [
+        this.execPath,
+        this.cwd(),
+        typeof context !== "undefined" ? context : undefined
+      ];
     }
   }
 });
