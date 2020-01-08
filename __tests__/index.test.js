@@ -26,7 +26,7 @@ test("process.platform should be an version string", () => {
 });
 
 test("process.cwd should be a function", () => {
-  expect(process.cwd).toBe("object");
+  expect(typeof process.cwd).toBe("function");
 });
 
 test("process.env should be an object", () => {
