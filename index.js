@@ -1,95 +1,100 @@
-var EventEmitter = require("events");
-var toObject = require("util").toObject;
+var EventEmitter = require('events')
+var toObject = require('util').toObject
 
 var currentLocale = (function currentLocale() {
   // NSLocale.currentLocale() only returns the language that is supported by the host application
-  var languageCode = String(NSLocale.preferredLanguages()[0]).split("-")[0];
+  var languageCode = String(NSLocale.preferredLanguages()[0]).split('-')[0]
   if (!languageCode) {
-    return undefined;
+    return undefined
   }
   var countryCode = String(NSLocale.currentLocale().localeIdentifier()).split(
-    "_"
-  )[1];
+    '_'
+  )[1]
   if (!countryCode) {
-    return languageCode;
+    return languageCode
   }
-  return languageCode + "-" + countryCode;
-})();
+  return languageCode + '-' + countryCode
+})()
 
-var processShim = new EventEmitter();
+var processShim = new EventEmitter()
 
 Object.defineProperties(processShim, {
   title: {
     enumerable: true,
     get() {
-      return String(__command.name());
-    }
+      return String(__command.name())
+    },
   },
   version: {
     enumerable: true,
     get() {
-      var pluginBundle = __command.pluginBundle();
-      return pluginBundle ? String(pluginBundle.version()) : "0.0.0";
-    }
+      var pluginBundle = __command.pluginBundle()
+      return pluginBundle ? String(pluginBundle.version()) : '0.0.0'
+    },
   },
   versions: {
     enumerable: true,
     get() {
-      return {
+      var v = {
         plugin: this.version,
-        sketch: String(MSApplicationMetadata.metadata().appVersion)
-      };
-    }
+      }
+      if (BCSketchInfo) {
+        v.sketch = String(BCSketchInfo.shared().metadata().appVersion)
+      } else {
+        v.sketch = String(MSApplicationMetadata.metadata().appVersion)
+      }
+      return v
+    },
   },
   arch: {
     enumerable: true,
-    value: "x64"
+    value: 'x64',
   },
   platform: {
     enumerable: true,
-    value: "darwin"
+    value: 'darwin',
   },
   cwd: {
     enumerable: true,
-    value: function() {
-      var pluginBundle = __command.pluginBundle();
-      return pluginBundle ? String(pluginBundle.url().path()) : "/tmp";
-    }
+    value: function () {
+      var pluginBundle = __command.pluginBundle()
+      return pluginBundle ? String(pluginBundle.url().path()) : '/tmp'
+    },
   },
   env: {
     enumerable: true,
     get() {
-      var env = toObject(NSProcessInfo.processInfo().environment());
-      var pluginBundle = __command.pluginBundle();
-      env.command = __command;
+      var env = toObject(NSProcessInfo.processInfo().environment())
+      var pluginBundle = __command.pluginBundle()
+      env.command = __command
       if (pluginBundle) {
-        env.plugin = pluginBundle;
+        env.plugin = pluginBundle
       }
       if (currentLocale) {
-        env.LANG = currentLocale;
+        env.LANG = currentLocale
       }
-      return env;
-    }
+      return env
+    },
   },
   pid: {
     enumerable: true,
     get() {
-      return String(__command.identifier);
-    }
+      return String(__command.identifier)
+    },
   },
   execPath: {
     enumerable: true,
-    value: String(NSBundle.mainBundle().executablePath())
+    value: String(NSBundle.mainBundle().executablePath()),
   },
   type: {
     enumerable: true,
-    value: "sketch"
+    value: 'sketch',
   },
   nextTick: {
     enumerable: true,
     get() {
-      return setImmediate;
-    }
+      return setImmediate
+    },
   },
   argv: {
     enumerable: true,
@@ -97,10 +102,10 @@ Object.defineProperties(processShim, {
       return [
         this.execPath,
         this.cwd(),
-        typeof context !== "undefined" ? context : undefined
-      ];
-    }
-  }
-});
+        typeof context !== 'undefined' ? context : undefined,
+      ]
+    },
+  },
+})
 
-module.exports = processShim;
+module.exports = processShim
