@@ -38,7 +38,7 @@ Object.defineProperties(processShim, {
       var v = {
         plugin: this.version,
       }
-      if (BCSketchInfo) {
+      if (typeof BCSketchInfo !== 'undefined') {
         v.sketch = String(BCSketchInfo.shared().metadata().appVersion)
       } else {
         v.sketch = String(MSApplicationMetadata.metadata().appVersion)
